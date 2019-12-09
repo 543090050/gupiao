@@ -1,7 +1,6 @@
 package com.syf.domain;
 
 import java.util.List;
-
 public class GuPiao {
     private String id;
     private String name;

@@ -3,7 +3,8 @@ package com.syf.domain;
 public class XiangXi {
     private String id;
     private String time;
-    private String guPiao_id;
+    private String tougu;
+    private String gongsi_id;
 
     public String getId() {
         return id;
@@ -21,11 +22,19 @@ public class XiangXi {
         this.time = time;
     }
 
-    public String getGuPiao_id() {
-        return guPiao_id;
+    public String getTougu() {
+        return tougu;
     }
 
-    public void setGuPiao_id(String guPiao_id) {
-        this.guPiao_id = guPiao_id;
+    public void setTougu(String tougu) {
+        this.tougu = tougu;
+    }
+
+    public String getGongsi_id() {
+        return gongsi_id;
+    }
+
+    public void setGongsi_id(String gongsi_id) {
+        this.gongsi_id = gongsi_id;
     }
 }

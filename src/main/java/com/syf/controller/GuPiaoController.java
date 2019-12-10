@@ -1,13 +1,14 @@
 package com.syf.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.syf.domain.GuPiao;
 import com.syf.service.IGuPiaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public class GuPiaoController {
     @Autowired
     IGuPiaoService guPiaoService;
+    @Autowired
+    private HttpServletRequest request;
 
 
     @RequestMapping("findGP")
@@ -44,8 +47,9 @@ public class GuPiaoController {
 
     @RequestMapping("deleteGP")
     public String deleteGP() {
+        String id = request.getParameter("id");
         GuPiao guPiao = new GuPiao();
-        guPiao.setId("a1");
+        guPiao.setId(id);
         guPiaoService.delete(guPiao);
         return "index";
     }
@@ -57,20 +61,25 @@ public class GuPiaoController {
         return "index";
     }
 
-    @RequestMapping("queryGP")
+    @RequestMapping(value = "/queryGP", method = RequestMethod.GET)
     @ResponseBody
     public List queryGP() {
+
+
+        String queryCode = request.getParameter("queryCode");
+        String queryName = request.getParameter("queryName");
+
 //        GuPiao guPiao = new GuPiao();
 //        guPiao.setId("1");
 //        guPiaoService.queryForList(guPiao);
         List list = new ArrayList();
-        for (int i = 0; i <10; i++) {
+        for (int i = 0; i < 10; i++) {
             GuPiao guPiao = new GuPiao();
             guPiao.setId(i + "");
             guPiao.setName("name " + i);
             list.add(guPiao);
         }
-        System.out.println(JSONObject.toJSON(list));
+        System.out.println(queryCode + " " + queryName);
         return list;
     }
 

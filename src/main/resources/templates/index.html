@@ -7,16 +7,39 @@
     <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="/js/gupiao.js"></script>
+    <script src="/js/Ewin.js"></script>
 </head>
 <body>
-
-
-
 <!-- 按钮触发模态框 -->
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+<button class="btn btn-primary" onclick="modifyGongSi()">
     添加
 </button>
-<!-- 模态框（Modal） -->
+<!--搜索框-->
+<div class="input-group">
+    <span class="input-group-addon">编号</span>
+    <input type="text" id="queryCode" class="form-control" placeholder="输入编号">
+    <span class="input-group-addon">名称</span>
+    <input type="text" id="queryName" class="form-control" placeholder="输入名称">
+</div>
+<button class="btn btn-primary" onclick="queryTable()">
+    查询
+</button>
+
+
+<table id="table1" class="table">
+    <thead id="thead1">
+    <tr>
+        <th>编号</th>
+        <th>名称</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="tb1">
+    </tbody>
+</table>
+
+
+<!-- 添加模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -25,7 +48,7 @@
                         aria-hidden="true">×
                 </button>
                 <h4 class="modal-title" id="myModalLabel">
-                    添加公司
+                    添加/修改公司
                 </h4>
             </div>
             <div class="modal-body">
@@ -51,20 +74,5 @@
         </div>
     </div>
 </div>
-
-<table id="table1" class="table">
-    <thead id="thead1">
-    <tr>
-        <th>编号</th>
-        <th>名称</th>
-        <th>操作</th>
-    </tr>
-    </thead>
-    <tbody id="tb1">
-    </tbody>
-</table>
-
-
-
 </body>
 </html>

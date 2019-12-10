@@ -4,9 +4,10 @@ $(document).ready(function () {
 
 function fillTable() {
     var oTable = $("#tb1");
-    // 清空表格
     oTable.empty();
-    var queryUrl = "http://127.0.0.1:8080/queryGP";
+    var queryCode=$("#queryCode").val()
+    var queryName = $("#queryName").val()
+    var queryUrl = "http://127.0.0.1:8080/queryGP?queryCode=" + queryCode + "&queryName=" + queryName;
     $.ajax({
         url: queryUrl,
         type: 'get',
@@ -63,8 +64,38 @@ function findGongSi(id) {
 
 function modifyGongSi(id) {
     $('#myModal').modal('show');
+    if(typeof id == "undefined" || id == null || id == ""){
+        //添加
+        $('#myModalLabel').html("添加公司");
+        $("#code").val("");
+        $("#code").attr("disabled", false);
+        $("#name").val("");
+    }else {
+        //修改
+        $('#myModalLabel').html("修改公司");
+        $("#code").val("123");
+        $("#code").attr("disabled", true);
+        $("#name").val("456");
+    }
 }
 
 function deleteGongSi(id) {
+    Ewin.confirm({ message: "确认删除" }).on(function (e) {
+        if (!e) {
+            return;
+        }
+        var url ="http://127.0.0.1:8080/deleteGP?id="+id;
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: {},
+            success: function (data) {
+                fillTable()
+            }
+        })
+    });
+}
 
+function queryTable() {
+    fillTable()
 }

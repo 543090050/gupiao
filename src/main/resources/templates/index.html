@@ -3,36 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>Dalaoyang</title>
-    <link rel="stylesheet" href="/webjars/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.5/css/bootstrap.min.css"/>
     <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="/js/gupiao.js"></script>
 </head>
 <body>
-<div class="container"><br/>
-    <div class="alert alert-success">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-        <h3>index首页</h3>Hello, <strong>springboot and bootstrap！！！</strong>
-    </div>
-</div>
 
-<h2>创建模态框（Modal）</h2>
+
+
 <!-- 按钮触发模态框 -->
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">开始演示模态框</button>
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    添加
+</button>
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">模态框（Modal）标题</h4>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    添加公司
+                </h4>
             </div>
-            <div class="modal-body">在这里添加一些文本</div>
+            <div class="modal-body">
+                <!-- 模态框的内容-->
+                <div class="input-group">
+                    <span class="input-group-addon">编号</span>
+                    <input type="text" id="code" class="form-control" placeholder="输入编号">
+                </div>
+                <br>
+                <div class="input-group">
+                    <span class="input-group-addon">名称</span>
+                    <input type="text" id="name" class="form-control" placeholder="输入名称">
+                </div>
+            </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">提交更改</button>
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">关闭
+                </button>
+                <button type="button" id = "addCommit" class="btn btn-primary">
+                    确认
+                </button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+    </div>
 </div>
+
+<table id="table1" class="table">
+    <thead id="thead1">
+    <tr>
+        <th>编号</th>
+        <th>名称</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="tb1">
+    </tbody>
+</table>
+
+
+
 </body>
 </html>

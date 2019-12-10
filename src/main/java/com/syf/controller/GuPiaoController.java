@@ -1,10 +1,15 @@
 package com.syf.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.syf.domain.GuPiao;
 import com.syf.service.IGuPiaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class GuPiaoController {
@@ -45,12 +50,28 @@ public class GuPiaoController {
         return "index";
     }
 
-    @RequestMapping("queryGP")
-    public String queryGP() {
-        GuPiao guPiao = new GuPiao();
-        guPiao.setId("1");
-        guPiaoService.queryForList(guPiao);
+
+    @RequestMapping("initQueryGP")
+    public String initQueryGP() {
+
         return "index";
+    }
+
+    @RequestMapping("queryGP")
+    @ResponseBody
+    public List queryGP() {
+//        GuPiao guPiao = new GuPiao();
+//        guPiao.setId("1");
+//        guPiaoService.queryForList(guPiao);
+        List list = new ArrayList();
+        for (int i = 0; i <10; i++) {
+            GuPiao guPiao = new GuPiao();
+            guPiao.setId(i + "");
+            guPiao.setName("name " + i);
+            list.add(guPiao);
+        }
+        System.out.println(JSONObject.toJSON(list));
+        return list;
     }
 
     @RequestMapping("index")

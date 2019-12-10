@@ -16,6 +16,16 @@ public class XiangXiSerivceImpl implements IXiangXiService {
     private JdbcTemplate jdbcTemplate;
 
     @Override
+    public void apply(XiangXi obj) {
+        obj = find(obj);
+        if (null == obj) {
+            create(obj);
+        }else {
+            update(obj);
+        }
+    }
+
+    @Override
     public void create(XiangXi obj) {
         jdbcTemplate.update("insert into xiangxi(id, time, tougu, gongsi_id) values(?, ?, ?, ?)",
                 obj.getId(), obj.getTime(), obj.getTougu(), obj.getGongsi_id());

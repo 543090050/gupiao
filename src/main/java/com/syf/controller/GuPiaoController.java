@@ -21,26 +21,33 @@ public class GuPiaoController {
 
 
     @RequestMapping("findGP")
-    public String findGP() {
+    @ResponseBody
+    public GuPiao findGP() {
         GuPiao guPiao = new GuPiao();
-        guPiaoService.find(guPiao);
-        return "index";
+//        guPiaoService.find(guPiao);
+        guPiao.setId("2348");
+        guPiao.setName("pppp");
+        return guPiao;
     }
 
     @RequestMapping("createGP")
-    public String createGP() {
+    public String applyGP() {
+        String code = request.getParameter("code");
+        String name = request.getParameter("name");
         GuPiao guPiao = new GuPiao();
-        guPiao.setId("a1");
-        guPiao.setName("a2");
-        guPiaoService.create(guPiao);
+        guPiao.setId(code);
+        guPiao.setName(name);
+        guPiaoService.apply(guPiao);
         return "index";
     }
 
     @RequestMapping("updateGP")
     public String updateGP() {
+        String code = request.getParameter("code");
+        String name = request.getParameter("name");
         GuPiao guPiao = new GuPiao();
-        guPiao.setId("3");
-        guPiao.setName("bbb");
+        guPiao.setId(code);
+        guPiao.setName(name);
         guPiaoService.update(guPiao);
         return "index";
     }

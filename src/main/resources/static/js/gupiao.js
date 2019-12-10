@@ -2,10 +2,13 @@ $(document).ready(function () {
     fillTable();
 });
 
+/**
+ * 填充表格
+ */
 function fillTable() {
     var oTable = $("#tb1");
     oTable.empty();
-    var queryCode=$("#queryCode").val()
+    var queryCode = $("#queryCode").val()
     var queryName = $("#queryName").val()
     var queryUrl = "http://127.0.0.1:8080/queryGP?queryCode=" + queryCode + "&queryName=" + queryName;
     $.ajax({
@@ -14,10 +17,7 @@ function fillTable() {
         data: {},
         success: function (data) {
             for (var i = 0; i < data.length; i++) {
-                var id = data[i].id;
-                var name = data[i].name;
-                var flag = getFlag(i);
-                oTable.append("<tr class='" + flag + "'><td>" + id + "</td><td>" + name + "</td></td><td>" + render(id) + "</td></tr>");
+                oTable.append("<tr class='" + getFlag(i) + "'><td>" + data[i].id + "</td><td>" + data[i].name + "</td></td><td>" + render(data[i].id) + "</td></tr>");
             }
         }
     })
@@ -30,7 +30,11 @@ function render(id) {
     return str;
 }
 
-//构造表格行的样式
+/**
+ * 构造表格行的样式
+ * @param i
+ * @returns {number}
+ */
 function getFlag(i) {
     var flag = i % 4;
     if (flag == 0) {
@@ -48,15 +52,9 @@ function getFlag(i) {
 $(function () {
     //模态框-确认按钮
     $("#addCommit").click(function () {
-        addGongSi()
         $('#myModal').modal('hide')
     });
 })
-
-function addGongSi() {
-    var id = $("#code").val();
-    var name = $("#name").val();
-}
 
 function findGongSi(id) {
     alert(id)
@@ -64,27 +62,35 @@ function findGongSi(id) {
 
 function modifyGongSi(id) {
     $('#myModal').modal('show');
-    if(typeof id == "undefined" || id == null || id == ""){
+    if (typeof id == "undefined" || id == null || id == "") {
         //添加
         $('#myModalLabel').html("添加公司");
         $("#code").val("");
         $("#code").attr("disabled", false);
         $("#name").val("");
-    }else {
+    } else {
         //修改
-        $('#myModalLabel').html("修改公司");
-        $("#code").val("123");
-        $("#code").attr("disabled", true);
-        $("#name").val("456");
+        var url = "http://127.0.0.1:8080/findGP?id=" + id;
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: {},
+            success: function (data) {
+                $('#myModalLabel').html("修改公司");
+                $("#code").val(data.id);
+                $("#name").val(data.name);
+                $("#code").attr("disabled", true);
+            }
+        })
     }
 }
 
 function deleteGongSi(id) {
-    Ewin.confirm({ message: "确认删除" }).on(function (e) {
+    Ewin.confirm({message: "确认删除"}).on(function (e) {
         if (!e) {
             return;
         }
-        var url ="http://127.0.0.1:8080/deleteGP?id="+id;
+        var url = "http://127.0.0.1:8080/deleteGP?id=" + id;
         $.ajax({
             url: url,
             type: 'get',

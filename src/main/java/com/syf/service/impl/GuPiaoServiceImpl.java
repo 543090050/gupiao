@@ -15,6 +15,17 @@ public class GuPiaoServiceImpl implements IGuPiaoService {
     private JdbcTemplate jdbcTemplate;
 
     @Override
+    public GuPiao apply(GuPiao guPiao) {
+        guPiao = find(guPiao);
+        if (null ==guPiao) {
+            create(guPiao);
+        }else {
+            update(guPiao);
+        }
+        return null;
+    }
+
+    @Override
     public void create(GuPiao obj) {
         jdbcTemplate.update("insert into gongsi(id, name) values(?, ?)",
                 obj.getId(), obj.getName());

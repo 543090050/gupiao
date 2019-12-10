@@ -5,6 +5,8 @@ import com.syf.domain.GuPiao;
 import java.util.List;
 
 public interface IGuPiaoService {
+    GuPiao apply(GuPiao guPiao);
+
     void create(GuPiao guPiao);
 
     void delete(GuPiao guPiao);

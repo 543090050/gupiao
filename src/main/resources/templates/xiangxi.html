@@ -2,36 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>公司</title>
+    <title>详细</title>
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.5/css/bootstrap.min.css"/>
     <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="/js/gupiao.js"></script>
+    <script src="/js/xiangxi.js"></script>
     <script src="/js/Ewin.js"></script>
 </head>
 <body>
 <!-- 按钮触发模态框 -->
-<button class="btn btn-primary" onclick="applyGongSi()">
+<button class="btn btn-primary" onclick="applyXiangXi()">
     添加
 </button>
-<!--搜索框-->
-<div class="input-group">
-    <span class="input-group-addon">编号</span>
-    <input type="text" id="queryCode" class="form-control" placeholder="输入编号">
-    <span class="input-group-addon">名称</span>
-    <input type="text" id="queryName" class="form-control" placeholder="输入名称">
-</div>
-<button class="btn btn-primary" onclick="queryTable()">
-    查询
-</button>
+
 
 <!--表格表头-->
 <table id="table1" class="table">
     <thead id="thead1">
     <tr>
-        <th>编号</th>
-        <th>名称</th>
-        <th>操作</th>
+        <th>时间</th>
+        <th>投股</th>
     </tr>
     </thead>
     <tbody id="tb1">
@@ -55,13 +45,14 @@
                 <div class="modal-body">
                     <!-- 模态框的内容-->
                     <div class="input-group">
-                        <span class="input-group-addon">编号</span>
-                        <input type="text" id="code" name="code" class="form-control" placeholder="输入编号">
+                        <span class="input-group-addon">时间</span>
+                        <input type="text" id="time" name="time" class="form-control" placeholder="输入时间">
                     </div>
+
                     <br>
                     <div class="input-group">
-                        <span class="input-group-addon">名称</span>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="输入名称">
+                        <span class="input-group-addon">投股</span>
+                        <input type="text" id="tougu" name="tougu" class="form-control" placeholder="输入投股">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -76,5 +67,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>

@@ -24,8 +24,8 @@ function fillTable() {
 }
 
 function render(id) {
-    var str = "<a href=\"javascript:findGongSi('" + id + "')\">详细 </a>";
-    str = str + "<a href=\"javascript:modifyGongSi('" + id + "')\">修改 </a>";
+    var str = "<a href=\"xiangxi/index?gpid='" + id + "'\" target=\"_blank\">详细 </a>";
+    str = str + "<a href=\"javascript:applyGongSi('" + id + "')\">修改 </a>";
     str = str + "<a href=\"javascript:deleteGongSi('" + id + "')\">删除 </a>";
     return str;
 }
@@ -60,7 +60,7 @@ function findGongSi(id) {
     alert(id)
 }
 
-function modifyGongSi(id) {
+function applyGongSi(id) {
     $('#myModal').modal('show');
     if (typeof id == "undefined" || id == null || id == "") {
         //添加

@@ -16,8 +16,8 @@ public class GuPiaoServiceImpl implements IGuPiaoService {
 
     @Override
     public GuPiao apply(GuPiao guPiao) {
-        guPiao = find(guPiao);
-        if (null ==guPiao) {
+        GuPiao oldGuPiao = find(guPiao);
+        if (null ==oldGuPiao) {
             create(guPiao);
         }else {
             update(guPiao);
@@ -41,7 +41,7 @@ public class GuPiaoServiceImpl implements IGuPiaoService {
         String id = obj.getId();
         String sql = "select * from gongsi where id =?";
         List<GuPiao> result = jdbcTemplate.query(sql, new Object[]{id}, new BeanPropertyRowMapper(GuPiao.class));
-        if (result == null) {
+        if (result == null||result.size()==0) {
             return null;
         }
         return result.get(0);
@@ -63,7 +63,7 @@ public class GuPiaoServiceImpl implements IGuPiaoService {
             sql = sql + " and id = " + id;
         }
         if (!"".equals(name) && null != name) {
-            sql = sql + " and name =" + name;
+            sql = sql + " and name ='" + name+"'";
         }
         List<GuPiao> result = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper(GuPiao.class));
         return result;

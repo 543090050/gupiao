@@ -10,6 +10,13 @@
     <script src="/js/Ewin.js"></script>
 </head>
 <body>
+<h1>详细列表</h1>
+<input type="hidden" id="parentId1" name="parentId1">
+
+<button class="btn btn-primary" onclick="goBack()">
+    返回
+</button>
+
 <!-- 按钮触发模态框 -->
 <button class="btn btn-primary" onclick="applyXiangXi()">
     添加
@@ -38,10 +45,10 @@
                         aria-hidden="true">×
                 </button>
                 <h4 class="modal-title" id="myModalLabel">
-                    添加/修改公司
+                    添加/修改详细
                 </h4>
             </div>
-            <form action="http://127.0.0.1:8080/ApplyGP" method="get">
+            <form action="http://127.0.0.1:8080/applyXX" method="get">
                 <div class="modal-body">
                     <!-- 模态框的内容-->
                     <div class="input-group">
@@ -53,6 +60,8 @@
                     <div class="input-group">
                         <span class="input-group-addon">投股</span>
                         <input type="text" id="tougu" name="tougu" class="form-control" placeholder="输入投股">
+                        <input type="hidden" id="parentId" name="parentId">
+                        <input type="hidden" id="id" name="id">
                     </div>
                 </div>
                 <div class="modal-footer">

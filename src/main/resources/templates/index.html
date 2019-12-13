@@ -10,6 +10,7 @@
     <script src="/js/Ewin.js"></script>
 </head>
 <body>
+<h1>公司列表</h1>
 <!-- 按钮触发模态框 -->
 <button class="btn btn-primary" onclick="applyGongSi()">
     添加
@@ -21,7 +22,7 @@
     <span class="input-group-addon">名称</span>
     <input type="text" id="queryName" class="form-control" placeholder="输入名称">
 </div>
-<button class="btn btn-primary" onclick="queryTable()">
+<button class="btn btn-primary" id ="queryButton" onclick="fillTable()">
     查询
 </button>
 
@@ -51,7 +52,7 @@
                     添加/修改公司
                 </h4>
             </div>
-            <form action="http://127.0.0.1:8080/ApplyGP" method="get">
+            <form action="http://127.0.0.1:8080/applyGP" method="get">
                 <div class="modal-body">
                     <!-- 模态框的内容-->
                     <div class="input-group">

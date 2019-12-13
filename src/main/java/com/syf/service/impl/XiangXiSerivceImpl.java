@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class XiangXiSerivceImpl implements IXiangXiService {
@@ -17,8 +18,8 @@ public class XiangXiSerivceImpl implements IXiangXiService {
 
     @Override
     public void apply(XiangXi obj) {
-        obj = find(obj);
-        if (null == obj) {
+        XiangXi oldObj = find(obj);
+        if (null == oldObj) {
             create(obj);
         }else {
             update(obj);
@@ -27,6 +28,7 @@ public class XiangXiSerivceImpl implements IXiangXiService {
 
     @Override
     public void create(XiangXi obj) {
+        obj.setId(UUID.randomUUID().toString());
         jdbcTemplate.update("insert into xiangxi(id, time, tougu, gongsi_id) values(?, ?, ?, ?)",
                 obj.getId(), obj.getTime(), obj.getTougu(), obj.getGongsi_id());
     }
@@ -41,7 +43,7 @@ public class XiangXiSerivceImpl implements IXiangXiService {
         String id = obj.getId();
         String sql = "select * from xiangxi where id =?";
         List<XiangXi> result = jdbcTemplate.query(sql, new Object[]{id}, new BeanPropertyRowMapper(XiangXi.class));
-        if (result == null) {
+        if (result == null||result.size()==0) {
             return null;
         }
         return result.get(0);
@@ -57,10 +59,10 @@ public class XiangXiSerivceImpl implements IXiangXiService {
 
     @Override
     public List<XiangXi> queryForList(XiangXi obj) {
-        String id = obj.getId();
+        String parentId = obj.getGongsi_id();
         String sql = "select * from xiangxi where 1=1";
-        if (!"".equals(id) && null != id) {
-            sql = sql + " and id = " + id;
+        if (!"".equals(parentId) && null != parentId) {
+            sql = sql + " and gongsi_id = " + parentId;
         }
         List<XiangXi> result = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper(XiangXi.class));
         return result;

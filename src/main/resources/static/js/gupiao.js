@@ -2,6 +2,15 @@ $(document).ready(function () {
     fillTable();
 });
 
+//回车搜索
+document.onkeydown = function (e) {
+    var theEvent = window.event || e;
+    var code = theEvent.keyCode || theEvent.which;
+    if (code == 13) {
+        $("#queryButton").click();
+    }
+}
+
 /**
  * 填充表格
  */
@@ -24,7 +33,8 @@ function fillTable() {
 }
 
 function render(id) {
-    var str = "<a href=\"xiangxi/index?gpid='" + id + "'\" target=\"_blank\">详细 </a>";
+    // var str = "<a href=\"xiangxi/index?gpid=" + id + "\" target=\"_blank\">详细 </a>";//打开新窗口
+    var str = "<a href=\"xiangxi/index?gpid=" + id + "\">详细 </a>";
     str = str + "<a href=\"javascript:applyGongSi('" + id + "')\">修改 </a>";
     str = str + "<a href=\"javascript:deleteGongSi('" + id + "')\">删除 </a>";
     return str;
@@ -50,15 +60,11 @@ function getFlag(i) {
 }
 
 $(function () {
-    //模态框-确认按钮
+    //模态框-确认按钮-隐藏窗口
     $("#addCommit").click(function () {
         $('#myModal').modal('hide')
     });
 })
-
-function findGongSi(id) {
-    alert(id)
-}
 
 function applyGongSi(id) {
     $('#myModal').modal('show');
@@ -66,7 +72,7 @@ function applyGongSi(id) {
         //添加
         $('#myModalLabel').html("添加公司");
         $("#code").val("");
-        $("#code").attr("disabled", false);
+        $("#code").attr("readonly", false);
         $("#name").val("");
     } else {
         //修改
@@ -79,7 +85,7 @@ function applyGongSi(id) {
                 $('#myModalLabel').html("修改公司");
                 $("#code").val(data.id);
                 $("#name").val(data.name);
-                $("#code").attr("disabled", true);
+                $("#code").attr("readonly", true);
             }
         })
     }
@@ -100,8 +106,4 @@ function deleteGongSi(id) {
             }
         })
     });
-}
-
-function queryTable() {
-    fillTable()
 }

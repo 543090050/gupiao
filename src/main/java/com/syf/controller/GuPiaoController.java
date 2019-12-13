@@ -23,34 +23,37 @@ public class GuPiaoController {
     @RequestMapping("findGP")
     @ResponseBody
     public GuPiao findGP() {
+        String id = request.getParameter("id");
         GuPiao guPiao = new GuPiao();
-//        guPiaoService.find(guPiao);
-        guPiao.setId("2348");
-        guPiao.setName("pppp");
+        guPiao.setId(id);
+        guPiao = guPiaoService.find(guPiao);
         return guPiao;
     }
 
-    @RequestMapping("createGP")
+    @RequestMapping("applyGP")
     public String applyGP() {
         String code = request.getParameter("code");
         String name = request.getParameter("name");
+        if ("".equals(code) || null == code||"".equals(name)||null==name) {
+            return "redirect:/index";
+        }
         GuPiao guPiao = new GuPiao();
         guPiao.setId(code);
         guPiao.setName(name);
         guPiaoService.apply(guPiao);
-        return "index";
+        return "redirect:/index";
     }
 
-    @RequestMapping("updateGP")
-    public String updateGP() {
-        String code = request.getParameter("code");
-        String name = request.getParameter("name");
-        GuPiao guPiao = new GuPiao();
-        guPiao.setId(code);
-        guPiao.setName(name);
-        guPiaoService.update(guPiao);
-        return "index";
-    }
+//    @RequestMapping("updateGP")
+//    public String updateGP() {
+//        String code = request.getParameter("code");
+//        String name = request.getParameter("name");
+//        GuPiao guPiao = new GuPiao();
+//        guPiao.setId(code);
+//        guPiao.setName(name);
+//        guPiaoService.update(guPiao);
+//        return "index";
+//    }
 
     @RequestMapping("deleteGP")
     public String deleteGP() {
@@ -61,32 +64,16 @@ public class GuPiaoController {
         return "index";
     }
 
-
-    @RequestMapping("initQueryGP")
-    public String initQueryGP() {
-
-        return "index";
-    }
-
     @RequestMapping(value = "/queryGP", method = RequestMethod.GET)
     @ResponseBody
     public List queryGP() {
-
-
         String queryCode = request.getParameter("queryCode");
         String queryName = request.getParameter("queryName");
-
-//        GuPiao guPiao = new GuPiao();
-//        guPiao.setId("1");
-//        guPiaoService.queryForList(guPiao);
-        List list = new ArrayList();
-        for (int i = 0; i < 10; i++) {
-            GuPiao guPiao = new GuPiao();
-            guPiao.setId(i + "");
-            guPiao.setName("name " + i);
-            list.add(guPiao);
-        }
         System.out.println(queryCode + " " + queryName);
+        GuPiao guPiao = new GuPiao();
+        guPiao.setId(queryCode);
+        guPiao.setName(queryName);
+        List list = guPiaoService.queryForList(guPiao);
         return list;
     }
 

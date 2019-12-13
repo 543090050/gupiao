@@ -7,7 +7,6 @@ $(document).ready(function () {
 function fillTable() {
     var oTable = $("#tb1");
     oTable.empty();
-    var parentCode = $("#queryCode").val()
     var queryUrl = "http://127.0.0.1:8080/queryXX";
     $.ajax({
         url: queryUrl,
@@ -16,6 +15,8 @@ function fillTable() {
         success: function (data) {
             for (var i = 0; i < data.length; i++) {
                 oTable.append("<tr class='" + getFlag(i) + "'><td>" + data[i].time + "</td><td>" + data[i].tougu + "</td></td><td>" + render(data[i].id) + "</td></tr>");
+                $("#parentId").val(data[i].gongsi_id);
+                $("#parentId1").val(data[i].gongsi_id);
             }
         }
     })
@@ -33,9 +34,8 @@ function applyXiangXi(id) {
     if (typeof id == "undefined" || id == null || id == "") {
         //添加
         $('#myModalLabel').html("添加详细");
-        $("#code").val("");
-        $("#code").attr("disabled", false);
-        $("#name").val("");
+        $("#tougu").val("");
+        $("#id").val("");
     } else {
         //修改
         var url = "http://127.0.0.1:8080/findXX?id=" + id;
@@ -45,9 +45,8 @@ function applyXiangXi(id) {
             data: {},
             success: function (data) {
                 $('#myModalLabel').html("修改详细");
-                $("#code").val(data.id);
-                $("#name").val(data.name);
-                $("#code").attr("disabled", true);
+                $("#time").val(data.time);
+                $("#tougu").val(data.tougu);
             }
         })
     }
@@ -72,4 +71,26 @@ function getFlag(i) {
         flag = "danger"
     }
     return flag;
+}
+
+function goBack() {
+    window.location.href = "http://127.0.0.1:8080/index";
+}
+
+
+function deleteXiangXi(id) {
+    Ewin.confirm({message: "确认删除"}).on(function (e) {
+        if (!e) {
+            return;
+        }
+        var url = "http://127.0.0.1:8080/deleteXX?id=" + id;
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: {},
+            success: function (data) {
+                fillTable()
+            }
+        })
+    });
 }

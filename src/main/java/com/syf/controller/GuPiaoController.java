@@ -24,6 +24,10 @@ public class GuPiaoController {
     @ResponseBody
     public GuPiao findGP() {
         String id = request.getParameter("id");
+        if ("".equals(id) || null == id) {
+            System.out.println("findGP-公司code为空，是从详细页面查找的");
+            id = (String) request.getSession().getAttribute("parentId");
+        }
         GuPiao guPiao = new GuPiao();
         guPiao.setId(id);
         guPiao = guPiaoService.find(guPiao);

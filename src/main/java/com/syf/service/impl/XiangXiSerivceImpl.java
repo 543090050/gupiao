@@ -51,8 +51,7 @@ public class XiangXiSerivceImpl implements IXiangXiService {
 
     @Override
     public XiangXi update(XiangXi obj) {
-        obj = find(obj);
-        String slq = "update xiangxi set time ='" + obj.getTime() + "', tougu='" + obj.getTougu() + "'   where id =" + obj.getId();
+        String slq = "update xiangxi set time ='" + obj.getTime() + "', tougu='" + obj.getTougu() + "'   where id ='" + obj.getId()+"'";
         jdbcTemplate.update(slq);
         return obj;
     }
@@ -62,7 +61,7 @@ public class XiangXiSerivceImpl implements IXiangXiService {
         String parentId = obj.getGongsi_id();
         String sql = "select * from xiangxi where 1=1";
         if (!"".equals(parentId) && null != parentId) {
-            sql = sql + " and gongsi_id = " + parentId;
+            sql = sql + " and gongsi_id = '" + parentId+"'";
         }
         List<XiangXi> result = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper(XiangXi.class));
         return result;

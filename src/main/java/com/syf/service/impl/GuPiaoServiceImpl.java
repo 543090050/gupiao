@@ -1,7 +1,9 @@
 package com.syf.service.impl;
 
 import com.syf.domain.GuPiao;
+import com.syf.domain.XiangXi;
 import com.syf.service.IGuPiaoService;
+import com.syf.service.IXiangXiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,13 +15,15 @@ import java.util.List;
 public class GuPiaoServiceImpl implements IGuPiaoService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private IXiangXiService xiangXiService;
 
     @Override
     public GuPiao apply(GuPiao guPiao) {
         GuPiao oldGuPiao = find(guPiao);
-        if (null ==oldGuPiao) {
+        if (null == oldGuPiao) {
             create(guPiao);
-        }else {
+        } else {
             update(guPiao);
         }
         return null;
@@ -33,7 +37,16 @@ public class GuPiaoServiceImpl implements IGuPiaoService {
 
     @Override
     public void delete(GuPiao obj) {
-        jdbcTemplate.update("delete from gongsi where id = ?", obj.getId());
+        String gongsiId = obj.getId();
+        jdbcTemplate.update("delete from gongsi where id = ?", gongsiId);
+        XiangXi xiangXi = new XiangXi();
+        xiangXi.setGongsi_id(gongsiId);
+        List<XiangXi> xiangXiList = xiangXiService.queryForList(xiangXi);
+        if (null != xiangXiList) {
+            for (XiangXi xx : xiangXiList) {
+                xiangXiService.delete(xx);
+            }
+        }
     }
 
     @Override
@@ -41,7 +54,7 @@ public class GuPiaoServiceImpl implements IGuPiaoService {
         String id = obj.getId();
         String sql = "select * from gongsi where id =?";
         List<GuPiao> result = jdbcTemplate.query(sql, new Object[]{id}, new BeanPropertyRowMapper(GuPiao.class));
-        if (result == null||result.size()==0) {
+        if (result == null || result.size() == 0) {
             return null;
         }
         return result.get(0);
@@ -63,7 +76,7 @@ public class GuPiaoServiceImpl implements IGuPiaoService {
             sql = sql + " and id = " + id;
         }
         if (!"".equals(name) && null != name) {
-            sql = sql + " and name ='" + name+"'";
+            sql = sql + " and name ='" + name + "'";
         }
         List<GuPiao> result = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper(GuPiao.class));
         return result;

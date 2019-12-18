@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -38,7 +37,7 @@ public class GuPiaoController {
     public String applyGP() {
         String code = request.getParameter("code");
         String name = request.getParameter("name");
-        if ("".equals(code) || null == code||"".equals(name)||null==name) {
+        if ("".equals(code) || null == code || "".equals(name) || null == name) {
             return "redirect:/index";
         }
         GuPiao guPiao = new GuPiao();
@@ -47,17 +46,6 @@ public class GuPiaoController {
         guPiaoService.apply(guPiao);
         return "redirect:/index";
     }
-
-//    @RequestMapping("updateGP")
-//    public String updateGP() {
-//        String code = request.getParameter("code");
-//        String name = request.getParameter("name");
-//        GuPiao guPiao = new GuPiao();
-//        guPiao.setId(code);
-//        guPiao.setName(name);
-//        guPiaoService.update(guPiao);
-//        return "index";
-//    }
 
     @RequestMapping("deleteGP")
     public String deleteGP() {

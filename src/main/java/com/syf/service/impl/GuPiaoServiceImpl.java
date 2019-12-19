@@ -62,7 +62,7 @@ public class GuPiaoServiceImpl implements IGuPiaoService {
 
     @Override
     public GuPiao update(GuPiao obj) {
-        String slq = "update gongsi set name ='" + obj.getName() + "'   where id =" + obj.getId();
+        String slq = "update gongsi set name ='" + obj.getName() + "'   where id ='" + obj.getId()+"'";
         jdbcTemplate.update(slq);
         return obj;
     }
@@ -73,7 +73,7 @@ public class GuPiaoServiceImpl implements IGuPiaoService {
         String name = obj.getName();
         String sql = "select * from gongsi where 1=1";
         if (!"".equals(id) && null != id) {
-            sql = sql + " and id = " + id;
+            sql = sql + " and id = '" + id+"'";
         }
         if (!"".equals(name) && null != name) {
             sql = sql + " and name ='" + name + "'";

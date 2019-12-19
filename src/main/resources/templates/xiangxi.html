@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>详细</title>
-    <link rel="stylesheet" href="/webjars/bootstrap/3.3.5/css/bootstrap.min.css"/>
+
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css"/>
-    <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/moment-with-locales.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
     <script src="/js/xiangxi.js"></script>
     <script src="/js/Ewin.js"></script>
 </head>
 <body>
+
+
+
 <div class="content_wrap">
     <div class="section">
         <div class="content-title-wrap">
@@ -40,21 +49,6 @@
     </div>
 </div>
 
-
-
-<!--表格表头-->
-<!--<table id="table1" class="table">-->
-    <!--<thead id="thead1">-->
-    <!--<tr>-->
-        <!--<th>时间</th>-->
-        <!--<th>投股</th>-->
-    <!--</tr>-->
-    <!--</thead>-->
-    <!--<tbody id="tb1">-->
-    <!--</tbody>-->
-<!--</table>-->
-
-
 <!-- 添加模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -72,7 +66,14 @@
                     <!-- 模态框的内容-->
                     <div class="input-group">
                         <span class="input-group-addon">时间</span>
-                        <input type="text" id="time" name="time" class="form-control" placeholder="输入时间">
+<!--                        <input type="text" id="time" name="time" class="form-control" placeholder="输入时间">-->
+
+                        <div class='input-group date' id='datetimepicker2'>
+                            <input type='text' id="time" name="time" maxlength="0" class="form-control" />
+                            <span class="input-group-addon">
+                                 <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
 
                     <br>

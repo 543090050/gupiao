@@ -1,6 +1,10 @@
-$(document).ready(function () {
-    findGongSi()
+$(function () {
+    findGongSi();
     fillTable();
+    $('#datetimepicker2').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm',
+        locale: moment.locale('zh-cn')
+    });
 });
 
 /**
@@ -50,6 +54,7 @@ function applyXiangXi(id) {
             $('#myModalLabel').html("添加详细");
             $("#tougu").val("");
             $("#id").val("");
+            $("#time").val("");
         });
     } else {
         //修改
@@ -129,3 +134,4 @@ function findGongSi() {
         }
     })
 }
+

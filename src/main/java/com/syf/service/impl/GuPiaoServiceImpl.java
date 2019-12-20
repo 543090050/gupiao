@@ -76,7 +76,7 @@ public class GuPiaoServiceImpl implements IGuPiaoService {
             sql = sql + " and id = '" + id+"'";
         }
         if (!"".equals(name) && null != name) {
-            sql = sql + " and name ='" + name + "'";
+            sql = sql + " and name like '%" + name + "%'";
         }
         List<GuPiao> result = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper(GuPiao.class));
         return result;

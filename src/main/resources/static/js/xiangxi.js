@@ -45,17 +45,12 @@ function render(id) {
 
 function applyXiangXi(id) {
     if (typeof id == "undefined" || id == null || id == "") {
-        Ewin.confirm({message: "添加时保证只有一个tab页，否则导致数据紊乱。"}).on(function (e) {
-            if (!e) {
-                return;
-            }
             $('#myModal').modal('show');
             //添加
             $('#myModalLabel').html("添加详细");
             $("#tougu").val("");
             $("#id").val("");
             $("#time").val("");
-        });
     } else {
         //修改
         $('#myModal').modal('show');

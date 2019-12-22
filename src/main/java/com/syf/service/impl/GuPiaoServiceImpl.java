@@ -1,84 +1,106 @@
 package com.syf.service.impl;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import com.syf.domain.GuPiao;
-import com.syf.domain.XiangXi;
+import com.syf.domain.QGuPiao;
+import com.syf.jpa.GuPiaoJPA;
 import com.syf.service.IGuPiaoService;
 import com.syf.service.IXiangXiService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Slf4j
 @Service
-public class GuPiaoServiceImpl implements IGuPiaoService {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+public class GuPiaoServiceImpl extends BaseServiceImpl implements IGuPiaoService {
     @Autowired
     private IXiangXiService xiangXiService;
 
+    @Autowired
+    private GuPiaoJPA guPiaoJPA;
+
+    @Transactional//涉及修改删除时需要增加事务
+    @Modifying
     @Override
     public GuPiao apply(GuPiao guPiao) {
+        log.info("GuPiaoServiceImpl apply start");
         GuPiao oldGuPiao = find(guPiao);
         if (null == oldGuPiao) {
             create(guPiao);
         } else {
             update(guPiao);
         }
-        return null;
+        log.info("GuPiaoServiceImpl apply end");
+        return guPiao;
     }
 
     @Override
+    @Transactional//涉及修改删除时需要增加事务
     public void create(GuPiao obj) {
-        jdbcTemplate.update("insert into gongsi(id, name) values(?, ?)",
-                obj.getId(), obj.getName());
+        log.info("GuPiaoServiceImpl create start");
+        guPiaoJPA.save(obj);
+        log.info("GuPiaoServiceImpl create end");
     }
 
     @Override
+    @Transactional//涉及修改删除时需要增加事务
     public void delete(GuPiao obj) {
-        String gongsiId = obj.getId();
-        jdbcTemplate.update("delete from gongsi where id = ?", gongsiId);
-        XiangXi xiangXi = new XiangXi();
-        xiangXi.setGongsi_id(gongsiId);
-        List<XiangXi> xiangXiList = xiangXiService.queryForList(xiangXi);
-        if (null != xiangXiList) {
-            for (XiangXi xx : xiangXiList) {
-                xiangXiService.delete(xx);
-            }
-        }
+        log.info("GuPiaoServiceImpl delete start");
+        xiangXiService.batchDeleteByGuPiao(obj);
+
+        QGuPiao qGuPiao = QGuPiao.guPiao;
+        getQueryFactory().delete(qGuPiao).where(qGuPiao.id.eq(obj.getId())).execute();
+        log.info("GuPiaoServiceImpl delete end");
     }
 
     @Override
     public GuPiao find(GuPiao obj) {
-        String id = obj.getId();
-        String sql = "select * from gongsi where id =?";
-        List<GuPiao> result = jdbcTemplate.query(sql, new Object[]{id}, new BeanPropertyRowMapper(GuPiao.class));
-        if (result == null || result.size() == 0) {
-            return null;
-        }
-        return result.get(0);
+        log.info("GuPiaoServiceImpl find start");
+        QGuPiao qGuPiao = QGuPiao.guPiao;
+        obj = getQueryFactory()
+                .selectFrom(qGuPiao)//查询源
+                .where(qGuPiao.id.eq(obj.getId()))
+                .fetchOne();
+        log.info("GuPiaoServiceImpl find end");
+        return obj;
     }
 
     @Override
+    @Transactional//涉及修改删除时需要增加事务
+    @Modifying
     public GuPiao update(GuPiao obj) {
-        String slq = "update gongsi set name ='" + obj.getName() + "'   where id ='" + obj.getId()+"'";
-        jdbcTemplate.update(slq);
+        log.info("GuPiaoServiceImpl update start");
+        QGuPiao qGuPiao = QGuPiao.guPiao;
+        getQueryFactory().update(qGuPiao)
+                .set(qGuPiao.name, obj.getName())
+                .where(qGuPiao.id.eq(obj.getId()))
+                .execute();
+        log.info("GuPiaoServiceImpl update end");
         return obj;
     }
 
     @Override
     public List<GuPiao> queryForList(GuPiao obj) {
+        log.info("GuPiaoServiceImpl queryForList start");
         String id = obj.getId();
         String name = obj.getName();
-        String sql = "select * from gongsi where 1=1";
-        if (!"".equals(id) && null != id) {
-            sql = sql + " and id = '" + id+"'";
+
+        QGuPiao qGuPiao = QGuPiao.guPiao;
+        JPAQuery query = getQueryFactory().selectFrom(qGuPiao);
+
+        if (!StringUtils.isEmpty(name)) {
+            query.where(qGuPiao.name.like(name));
         }
-        if (!"".equals(name) && null != name) {
-            sql = sql + " and name like '%" + name + "%'";
+        if (!StringUtils.isEmpty(id)) {
+            query.where(qGuPiao.id.like(id));
         }
-        List<GuPiao> result = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper(GuPiao.class));
-        return result;
+       List list =  query.fetch();
+        log.info("GuPiaoServiceImpl queryForList end");
+        return list;
     }
 }

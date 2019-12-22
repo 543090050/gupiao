@@ -1,6 +1,7 @@
 package com.syf.service;
 
 
+import com.syf.domain.GuPiao;
 import com.syf.domain.XiangXi;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public interface IXiangXiService {
     void create(XiangXi obj);
 
     void delete(XiangXi obj);
+
+    void batchDeleteByGuPiao(GuPiao guPiao);
 
     XiangXi find(XiangXi obj);
 

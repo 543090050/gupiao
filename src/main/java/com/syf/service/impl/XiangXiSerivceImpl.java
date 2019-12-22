@@ -1,69 +1,101 @@
 package com.syf.service.impl;
 
+import com.syf.domain.GuPiao;
+import com.syf.domain.QXiangXi;
 import com.syf.domain.XiangXi;
+import com.syf.jpa.XiangXiJPA;
 import com.syf.service.IXiangXiService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.UUID;
 
+@Slf4j
 @Service
-public class XiangXiSerivceImpl implements IXiangXiService {
+public class XiangXiSerivceImpl extends BaseServiceImpl implements IXiangXiService {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private XiangXiJPA xiangXiJPA;
 
+    @Transactional
     @Override
     public void apply(XiangXi obj) {
+        log.info("XiangXiSerivceImpl apply start");
         XiangXi oldObj = find(obj);
         if (null == oldObj) {
             create(obj);
-        }else {
+        } else {
             update(obj);
         }
+        log.info("XiangXiSerivceImpl apply end");
     }
 
     @Override
     public void create(XiangXi obj) {
-        obj.setId(UUID.randomUUID().toString());
-        jdbcTemplate.update("insert into xiangxi(id, time, tougu, gongsi_id) values(?, ?, ?, ?)",
-                obj.getId(), obj.getTime(), obj.getTougu(), obj.getGongsi_id());
+        log.info("XiangXiSerivceImpl create start");
+        xiangXiJPA.save(obj);
+        log.info("XiangXiSerivceImpl create end");
     }
 
     @Override
+    @Transactional
     public void delete(XiangXi obj) {
-        jdbcTemplate.update("delete from xiangxi where id = ?", obj.getId());
+        log.info("XiangXiSerivceImpl delete start");
+        QXiangXi qXiangXi = QXiangXi.xiangXi;
+
+        getQueryFactory().delete(qXiangXi).where(qXiangXi.id.eq(obj.getId())).execute();
+        log.info("XiangXiSerivceImpl delete end");
+    }
+
+    @Transactional
+    @Override
+    public void batchDeleteByGuPiao(GuPiao guPiao) {
+        log.info("XiangXiSerivceImpl batchDeleteByGuPiao start");
+        XiangXi xiangXi = new XiangXi();
+        xiangXi.setGongsi_id(guPiao.getId());
+        List<XiangXi> xiangXiList = queryForList(xiangXi);
+        if (null != xiangXiList) {
+            for (XiangXi xx : xiangXiList) {
+                delete(xx);
+            }
+        }
+        log.info("XiangXiSerivceImpl batchDeleteByGuPiao end");
     }
 
     @Override
     public XiangXi find(XiangXi obj) {
+        log.info("XiangXiSerivceImpl find start");
         String id = obj.getId();
-        String sql = "select * from xiangxi where id =?";
-        List<XiangXi> result = jdbcTemplate.query(sql, new Object[]{id}, new BeanPropertyRowMapper(XiangXi.class));
-        if (result == null||result.size()==0) {
-            return null;
-        }
-        return result.get(0);
+        QXiangXi qXiangXi = QXiangXi.xiangXi;
+        obj = getQueryFactory().selectFrom(qXiangXi).where(qXiangXi.id.eq(id)).fetchOne();
+        log.info("XiangXiSerivceImpl find end");
+        return obj;
     }
 
+    @Transactional
     @Override
     public XiangXi update(XiangXi obj) {
-        String slq = "update xiangxi set time ='" + obj.getTime() + "', tougu='" + obj.getTougu() + "'   where id ='" + obj.getId()+"'";
-        jdbcTemplate.update(slq);
+        log.info("XiangXiSerivceImpl update start");
+        QXiangXi qXiangXi = QXiangXi.xiangXi;
+        getQueryFactory().update(qXiangXi)
+                .set(qXiangXi.time, obj.getTime())
+                .set(qXiangXi.tougu, obj.getTougu())
+                .where(qXiangXi.id.eq(obj.getId()))
+                .execute();
+        log.info("XiangXiSerivceImpl update end");
         return obj;
     }
 
     @Override
     public List<XiangXi> queryForList(XiangXi obj) {
-        String parentId = obj.getGongsi_id();
-        String sql = "select * from xiangxi where 1=1";
-        if (!"".equals(parentId) && null != parentId) {
-            sql = sql + " and gongsi_id = '" + parentId+"'";
-        }
-        List<XiangXi> result = jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper(XiangXi.class));
-        return result;
+        log.info("XiangXiSerivceImpl queryForList start");
+        QXiangXi qXiangXi = QXiangXi.xiangXi;
+        List list = getQueryFactory().selectFrom(qXiangXi)
+                .where(qXiangXi.gongsi_id.eq(obj.getGongsi_id()))
+                .fetch();
+        log.info("XiangXiSerivceImpl queryForList end");
+        return list;
     }
 }

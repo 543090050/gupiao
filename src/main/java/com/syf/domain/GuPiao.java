@@ -1,32 +1,19 @@
 package com.syf.domain;
 
-import java.util.List;
+import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Data//lombok
+@Entity
+@Table(name = "gongsi")
 public class GuPiao {
+    @Id
+    @Column(name = "id")
     private String id;
+    @Column(name = "name")
     private String name;
-    private List<XiangXi> xiangXiList;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<XiangXi> getXiangXiList() {
-        return xiangXiList;
-    }
-
-    public void setXiangXiList(List<XiangXi> xiangXiList) {
-        this.xiangXiList = xiangXiList;
-    }
 }

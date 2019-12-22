@@ -2,6 +2,7 @@ package com.syf.controller;
 
 import com.syf.domain.GuPiao;
 import com.syf.service.IGuPiaoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
+@Slf4j
 @Controller
 public class GuPiaoController {
     @Autowired
@@ -35,6 +36,8 @@ public class GuPiaoController {
 
     @RequestMapping("applyGP")
     public String applyGP() {
+        log.info("GuPiaoController applyGP start");
+
         String code = request.getParameter("code");
         String name = request.getParameter("name");
         if ("".equals(code) || null == code || "".equals(name) || null == name) {
@@ -44,6 +47,7 @@ public class GuPiaoController {
         guPiao.setId(code);
         guPiao.setName(name);
         guPiaoService.apply(guPiao);
+        log.info("GuPiaoController applyGP end");
         return "redirect:/index";
     }
 
@@ -59,6 +63,7 @@ public class GuPiaoController {
     @RequestMapping(value = "/queryGP", method = RequestMethod.GET)
     @ResponseBody
     public List queryGP() {
+        log.info("GuPiaoController queryGP start");
         String queryCode = request.getParameter("queryCode");
         String queryName = request.getParameter("queryName");
         System.out.println(queryCode + " " + queryName);
@@ -66,6 +71,7 @@ public class GuPiaoController {
         guPiao.setId(queryCode);
         guPiao.setName(queryName);
         List list = guPiaoService.queryForList(guPiao);
+        log.info("GuPiaoController queryGP start");
         return list;
     }
 

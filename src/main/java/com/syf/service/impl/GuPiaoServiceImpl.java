@@ -1,13 +1,21 @@
 package com.syf.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.syf.domain.GuPiao;
 import com.syf.domain.QGuPiao;
+import com.syf.domain.QXiangXi;
 import com.syf.jpa.GuPiaoJPA;
 import com.syf.service.IGuPiaoService;
 import com.syf.service.IXiangXiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -99,8 +107,42 @@ public class GuPiaoServiceImpl extends BaseServiceImpl implements IGuPiaoService
         if (!StringUtils.isEmpty(id)) {
             query.where(qGuPiao.id.like(id));
         }
-       List list =  query.fetch();
+        List list = query.fetch();
         log.info("GuPiaoServiceImpl queryForList end");
         return list;
+    }
+
+    @Override
+    public Page simplePageQuery(Predicate predicate, Pageable pageable) {
+        if (predicate == null) {
+            predicate = new BooleanBuilder();
+        }
+        Page<GuPiao> result = guPiaoJPA.findAll(predicate, pageable);
+        System.out.println(JSON.toJSONString(result));
+        return result;
+    }
+
+    @Override
+    public Page multiPageQuery(Predicate predicate, Pageable pageable) {
+        if (predicate == null) {
+            predicate = new BooleanBuilder();
+        }
+        QGuPiao qGuPiao = QGuPiao.guPiao;
+        QXiangXi qXiangXi = QXiangXi.xiangXi;
+        QueryResults<Tuple> result = getQueryFactory().select(qXiangXi.time, qGuPiao.name)
+                .from(qXiangXi)
+                .leftJoin(qGuPiao)
+                .on(qXiangXi.gongsi_id.eq(qGuPiao.id))
+                .where(predicate)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        System.out.println(JSON.toJSONString(result));
+        for(Tuple tuple:result.getResults()){
+            String time = tuple.get(qXiangXi.time);
+            String name = tuple.get(qGuPiao.name);
+            System.out.println(time+" "+name);
+        }
+        return null;
     }
 }

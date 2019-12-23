@@ -1,16 +1,23 @@
 package com.syf.controller;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.syf.domain.GuPiao;
 import com.syf.service.IGuPiaoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
 @Slf4j
 @Controller
 public class GuPiaoController {
@@ -18,7 +25,6 @@ public class GuPiaoController {
     IGuPiaoService guPiaoService;
     @Autowired
     private HttpServletRequest request;
-
 
     @RequestMapping("findGP")
     @ResponseBody
@@ -77,6 +83,33 @@ public class GuPiaoController {
 
     @RequestMapping("index")
     public String Hello() {
+        return "index";
+    }
+
+    /**
+     * 单表分页查询
+     *
+     * @param pageable
+     * @param predicate
+     * @return
+     */
+    @GetMapping("/simplePageQuery")
+    public String simplePageQuery(@QuerydslPredicate(root = GuPiao.class) Predicate predicate, Pageable pageable) {
+        //分页参数为 page；size
+        guPiaoService.simplePageQuery(predicate, pageable);
+        return "index";
+    }
+
+    /**
+     * 多表分页查询
+     *
+     * @param pageable
+     * @param predicate
+     * @return
+     */
+    @GetMapping("/multiPageQuery")
+    public String multiPageQuery(@QuerydslPredicate(root = GuPiao.class) Predicate predicate, Pageable pageable) {
+        guPiaoService.multiPageQuery(predicate, pageable);
         return "index";
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class XiangXiController {
@@ -74,6 +75,9 @@ public class XiangXiController {
             System.err.println("applyXX-parentId=============null");
             request.getSession().removeAttribute("parentId");
             return "redirect:/xiangxi/index";
+        }
+        if (null == id || "".equals(id)) {
+            id= UUID.randomUUID().toString();
         }
         XiangXi xiangXi = new XiangXi();
         xiangXi.setId(id);

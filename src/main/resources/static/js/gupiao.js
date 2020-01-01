@@ -27,6 +27,8 @@ var fillTable= function(){
         // showRefresh: true,                  //是否显示刷新按钮
         minimumCountColumns: 2,             //最少允许的列数
         clickToSelect: true,                //是否启用点击选中行
+        sortable: true, //是否启用排序
+        sortOrder: "desc", //排序方式
         toolbar: "#toolbar",
         queryParams: function (params) {
             return {
@@ -39,7 +41,7 @@ var fillTable= function(){
             // {checkbox: true},
             {field: 'id', title: '编码'},
             {field: 'name', title: '名称'},
-            {field: 'userno', title: '数量'},
+            {field: 'count', title: '数量'},
             {
                 field:'action',
                 title:'操作',

@@ -91,9 +91,13 @@ public class XiangXiSerivceImpl extends BaseServiceImpl implements IXiangXiServi
     @Override
     public List<XiangXi> queryForList(XiangXi obj) {
         log.info("XiangXiSerivceImpl queryForList start");
+        if (obj.getTime() == null) {
+            obj.setTime("");
+        }
         QXiangXi qXiangXi = QXiangXi.xiangXi;
         List list = getQueryFactory().selectFrom(qXiangXi)
-                .where(qXiangXi.gongsi_id.eq(obj.getGongsi_id()))
+                .where(qXiangXi.gongsi_id.eq(obj.getGongsi_id())
+                .and(qXiangXi.time.like(obj.getTime()+"%")))
                 .fetch();
         log.info("XiangXiSerivceImpl queryForList end");
         return list;

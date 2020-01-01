@@ -1,5 +1,6 @@
 package com.syf.service;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Predicate;
 import com.syf.domain.GuPiao;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,9 @@ public interface IGuPiaoService {
      * @param pageable
      * @return
      */
-    public Page pageQuery(Predicate predicate, Pageable pageable);
+    public QueryResults pageQuery(Predicate predicate, Pageable pageable);
+
+    public QueryResults pageQueryByTime(Predicate predicate, Pageable pageable, String time);
 
     /**
      * 多表查询

@@ -1,13 +1,16 @@
 package com.syf.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Predicate;
 import com.syf.domain.GuPiao;
 import com.syf.domain.QGuPiao;
+import com.syf.domain.QueryGuPiao;
+import com.syf.domain.XiangXi;
 import com.syf.service.IGuPiaoService;
+import com.syf.service.IXiangXiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +32,8 @@ import java.util.Map;
 public class GuPiaoController {
     @Autowired
     IGuPiaoService guPiaoService;
+    @Autowired
+    IXiangXiService xiangXiService;
     @Autowired
     private HttpServletRequest request;
 
@@ -101,33 +108,38 @@ public class GuPiaoController {
     public String pageQueryGP(Pageable pageable) {
         String queryContext = request.getParameter("queryContext");
         Predicate predicate = null;
-        if (!StringUtils.isEmpty(queryContext)) {
+        String time = "";
+        QueryResults<GuPiao> result =null;
+        if (StringUtils.isEmpty(queryContext)) {//为空时
+            result = guPiaoService.pageQuery(predicate, pageable);
+        }else if (isValidDate(queryContext)) {//为时间查询
+            time = queryContext;
+            result = guPiaoService.pageQueryByTime(null, pageable, time);
+        } else if (!StringUtils.isEmpty(queryContext)) {
             predicate = QGuPiao.guPiao.id.like("%" + queryContext + "%").or(QGuPiao.guPiao.name.like("%" + queryContext + "%"));
+            result = guPiaoService.pageQuery(predicate, pageable);
         }
-        Page<GuPiao> result = guPiaoService.pageQuery(predicate, pageable);
+        List resultList = new ArrayList();
+        for (GuPiao guPiao : result.getResults()) {
+            QueryGuPiao queryGuPiao = new QueryGuPiao();
+            queryGuPiao.setId(guPiao.getId());
+            queryGuPiao.setName(guPiao.getName());
+            queryGuPiao.setCount(0);
+            XiangXi xiangXi = new XiangXi();
+            xiangXi.setGongsi_id(guPiao.getId());
+            xiangXi.setTime(time);
+            List xxList = xiangXiService.queryForList(xiangXi);
+            if (xxList != null) {
+                queryGuPiao.setCount(xxList.size());
+            }
+            resultList.add(queryGuPiao);
+        }
         Map<String, Object> maps = new HashMap<>();
-        maps.put("rows", result.getContent());
-        maps.put("total", result.getTotalElements());
+        maps.put("rows", resultList);
+        maps.put("total", result.getTotal());
         return JSON.toJSONString(maps);
     }
 
-    /**
-     * 拼装查询条件
-     * @param guPiao
-     * @return
-     */
-//    private Predicate getPredicate(GuPiao guPiao) {
-//        QGuPiao qGuPiao = ;
-//        String id = guPiao.getId();
-//        String name = guPiao.getName();
-//        Predicate predicate = null;
-//        if (!StringUtils.isEmpty(id)) {
-//            predicate=qGuPiao.id.like(id).or(qGuPiao.name.like(id));
-//        }
-//
-//        return predicate;
-//
-//    }
 
     /**
      * 多表分页查询
@@ -142,4 +154,19 @@ public class GuPiaoController {
         return "index";
     }
 
+    /**
+     * 校验时间格式
+     *
+     * @param s
+     * @return
+     */
+    public boolean isValidDate(String s) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateFormat.parse(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

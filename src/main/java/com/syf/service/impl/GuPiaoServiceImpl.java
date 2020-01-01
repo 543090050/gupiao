@@ -115,12 +115,35 @@ public class GuPiaoServiceImpl extends BaseServiceImpl implements IGuPiaoService
     }
 
     @Override
-    public Page pageQuery(Predicate predicate, Pageable pageable) {
+    public QueryResults pageQuery(Predicate predicate, Pageable pageable) {
         if (predicate == null) {
             predicate = new BooleanBuilder();
         }
-        Page<GuPiao> result = guPiaoJPA.findAll(predicate, pageable);
-        System.out.println(JSON.toJSONString(result));
+//        Page<GuPiao> result = guPiaoJPA.findAll(predicate, pageable);
+        QGuPiao qGuPiao = QGuPiao.guPiao;
+        QueryResults<GuPiao> result =  getQueryFactory().selectFrom(qGuPiao)
+                .where(predicate)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        return result;
+    }
+
+    @Override
+    public QueryResults pageQueryByTime(Predicate predicate, Pageable pageable,String time ) {
+        if (predicate == null) {
+            predicate = new BooleanBuilder();
+        }
+        QGuPiao qGuPiao = QGuPiao.guPiao;
+        QueryResults<GuPiao> result =  getQueryFactory().selectFrom(qGuPiao)
+                .where(qGuPiao.id.in(
+                        JPAExpressions.select(QXiangXi.xiangXi.gongsi_id).from(QXiangXi.xiangXi)
+                        .where(QXiangXi.xiangXi.time.like(time+"%"))
+                        .groupBy(QXiangXi.xiangXi.gongsi_id)
+                ))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
         return result;
     }
 

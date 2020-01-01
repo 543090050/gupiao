@@ -26,7 +26,7 @@ public interface IGuPiaoService {
      * @param pageable
      * @return
      */
-    public Page simplePageQuery(Predicate predicate, Pageable pageable);
+    public Page pageQuery(Predicate predicate, Pageable pageable);
 
     /**
      * 多表查询

@@ -16,4 +16,5 @@ public class GuPiao {
     private String id;
     @Column(name = "name")
     private String name;
+//    private String count;
 }

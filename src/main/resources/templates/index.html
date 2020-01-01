@@ -4,43 +4,40 @@
     <meta charset="UTF-8">
     <title>公司</title>
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css"/>
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script src="/js/moment-with-locales.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
     <script src="/js/gupiao.js"></script>
     <script src="/js/Ewin.js"></script>
+
 </head>
 <body>
+
+
 <div class="content_wrap">
     <div class="section">
         <div class="content-title-wrap">
             <h1 class="content-title">公司列表</h1>
         </div>
     </div>
-    <!-- 按钮触发模态框 -->
-    <div class="actions-panel">
-        <a class="btn btn-primary_green" onclick="applyGongSi()"><span>添加</span></a>
-    </div>
+
     <div class="section w_div_border">
         <div style="margin-bottom: 10px;">
-            <span>编号:</span>
-            <input type="text" id="queryCode" class="search-input" placeholder="查询编号">
-            <span class="marginL5">名称:</span>
-            <input type="text" id="queryName" class="search-input" placeholder="查询名称">
+            <a class="btn btn-primary_green" onclick="applyGongSi()"><span>添加</span></a>
+            <input type="text" id="queryContext" class="search-input" placeholder="时间格式：2020-01-01">
+
             <a id="queryButton" class="btn-primary_blue marginL5" onclick="fillTable()"><span>查询</span></a>
+
         </div>
-        <div class="grid-wrap w_table_line">
-            <!--表格表头-->
-            <table id="table1" class="table">
-                <thead id="thead1">
-                <tr>
-                    <th>编号</th>
-                    <th>名称</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody id="tb1">
-                </tbody>
+
+        <div id="content">
+            <table id="table"></table>
             </table>
         </div>
     </div>

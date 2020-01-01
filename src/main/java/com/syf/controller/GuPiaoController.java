@@ -1,8 +1,9 @@
 package com.syf.controller;
 
-import com.querydsl.core.BooleanBuilder;
+import com.alibaba.fastjson.JSON;
 import com.querydsl.core.types.Predicate;
 import com.syf.domain.GuPiao;
+import com.syf.domain.QGuPiao;
 import com.syf.service.IGuPiaoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +11,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -90,15 +94,40 @@ public class GuPiaoController {
      * 单表分页查询
      *
      * @param pageable
-     * @param predicate
      * @return
      */
-    @GetMapping("/simplePageQuery")
-    public String simplePageQuery(@QuerydslPredicate(root = GuPiao.class) Predicate predicate, Pageable pageable) {
-        //分页参数为 page；size
-        guPiaoService.simplePageQuery(predicate, pageable);
-        return "index";
+    @GetMapping("/pageQueryGP")
+    @ResponseBody
+    public String pageQueryGP(Pageable pageable) {
+        String queryContext = request.getParameter("queryContext");
+        Predicate predicate = null;
+        if (!StringUtils.isEmpty(queryContext)) {
+            predicate = QGuPiao.guPiao.id.like("%" + queryContext + "%").or(QGuPiao.guPiao.name.like("%" + queryContext + "%"));
+        }
+        Page<GuPiao> result = guPiaoService.pageQuery(predicate, pageable);
+        Map<String, Object> maps = new HashMap<>();
+        maps.put("rows", result.getContent());
+        maps.put("total", result.getTotalElements());
+        return JSON.toJSONString(maps);
     }
+
+    /**
+     * 拼装查询条件
+     * @param guPiao
+     * @return
+     */
+//    private Predicate getPredicate(GuPiao guPiao) {
+//        QGuPiao qGuPiao = ;
+//        String id = guPiao.getId();
+//        String name = guPiao.getName();
+//        Predicate predicate = null;
+//        if (!StringUtils.isEmpty(id)) {
+//            predicate=qGuPiao.id.like(id).or(qGuPiao.name.like(id));
+//        }
+//
+//        return predicate;
+//
+//    }
 
     /**
      * 多表分页查询
@@ -112,4 +141,5 @@ public class GuPiaoController {
         guPiaoService.multiPageQuery(predicate, pageable);
         return "index";
     }
+
 }

@@ -5,6 +5,8 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.SubQueryExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.syf.domain.GuPiao;
 import com.syf.domain.QGuPiao;
@@ -113,7 +115,7 @@ public class GuPiaoServiceImpl extends BaseServiceImpl implements IGuPiaoService
     }
 
     @Override
-    public Page simplePageQuery(Predicate predicate, Pageable pageable) {
+    public Page pageQuery(Predicate predicate, Pageable pageable) {
         if (predicate == null) {
             predicate = new BooleanBuilder();
         }

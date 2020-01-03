@@ -1,17 +1,22 @@
 package com.syf.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Predicate;
+import com.syf.domain.GuPiao;
+import com.syf.domain.QXiangXi;
 import com.syf.domain.XiangXi;
 import com.syf.service.IXiangXiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 public class XiangXiController {
@@ -97,5 +102,28 @@ public class XiangXiController {
         xiangXi.setId(id);
         xiangXiService.delete(xiangXi);
         return "redirect:/xiangxi/index";
+    }
+
+    @GetMapping("/pageQueryXX")
+    @ResponseBody
+    public String pageQueryXX(Pageable pageable) {
+        Map<String, Object> maps = new HashMap<>();
+        XiangXi xiangXi = new XiangXi();
+        List list = new ArrayList();
+        String parentId = (String) request.getSession().getAttribute("parentId");
+        if ("".equals(parentId) || null == parentId) {
+            System.err.println("queryXX-parentId=============null");
+            request.getSession().removeAttribute("parentId");
+            xiangXi.setGongsi_id("-");
+            list.add(xiangXi);
+            maps.put("rows", list);
+            maps.put("total", 0);
+            return JSON.toJSONString(maps);
+        }
+        Predicate predicate = QXiangXi.xiangXi.gongsi_id.eq(parentId);
+        QueryResults<GuPiao> result  = xiangXiService.pageQuery(predicate,pageable);
+        maps.put("rows", result.getResults());
+        maps.put("total", result.getTotal());
+        return JSON.toJSONString(maps);
     }
 }

@@ -5,13 +5,16 @@
     <title>详细</title>
 
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
     <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css"/>
 
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
     <script src="/js/moment-with-locales.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://cdn.staticfile.org/bootstrap-table/1.13.5/locale/bootstrap-table-zh-CN.min.js"></script>
 
     <script src="/js/xiangxi.js"></script>
     <script src="/js/Ewin.js"></script>
@@ -37,20 +40,23 @@
         <a class="btn btn-primary_blue" onclick="goBack()"><span>返回</span></a>
     </div>
     <div class="section w_div_border">
-        <div class="grid-wrap w_table_line">
-            <!--表格表头-->
-            <table id="table1" class="table">
-                <thead id="thead1">
-                <tr>
-                    <th>时间</th>
-                    <th>投股</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody id="tb1">
-                </tbody>
-            </table>
+        <div id="content">
+            <table id="table"></table>
         </div>
+<!--        <div class="grid-wrap w_table_line">-->
+<!--            &lt;!&ndash;表格表头&ndash;&gt;-->
+<!--            <table id="table1" class="table">-->
+<!--                <thead id="thead1">-->
+<!--                <tr>-->
+<!--                    <th>时间</th>-->
+<!--                    <th>投股</th>-->
+<!--                    <th>操作</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody id="tb1">-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
     </div>
 </div>
 

@@ -42,7 +42,7 @@ public class GuPiaoController {
     public GuPiao findGP() {
         String id = request.getParameter("id");
         if ("".equals(id) || null == id) {
-            System.out.println("findGP-公司code为空，是从详细页面查找的");
+            log.info("findGP-公司code为空，是从详细页面查找的");
             id = (String) request.getSession().getAttribute("parentId");
         }
         GuPiao guPiao = new GuPiao();
@@ -53,7 +53,7 @@ public class GuPiaoController {
 
     @RequestMapping("applyGP")
     public String applyGP() {
-        log.info("GuPiaoController applyGP start");
+        log.debug("GuPiaoController applyGP start");
 
         String code = request.getParameter("code");
         String name = request.getParameter("name");
@@ -64,7 +64,7 @@ public class GuPiaoController {
         guPiao.setId(code);
         guPiao.setName(name);
         guPiaoService.apply(guPiao);
-        log.info("GuPiaoController applyGP end");
+        log.debug("GuPiaoController applyGP end");
         return "redirect:/index";
     }
 
@@ -80,7 +80,7 @@ public class GuPiaoController {
     @RequestMapping(value = "/queryGP", method = RequestMethod.GET)
     @ResponseBody
     public List queryGP() {
-        log.info("GuPiaoController queryGP start");
+        log.debug("GuPiaoController queryGP start");
         String queryCode = request.getParameter("queryCode");
         String queryName = request.getParameter("queryName");
         System.out.println(queryCode + " " + queryName);
@@ -88,7 +88,7 @@ public class GuPiaoController {
         guPiao.setId(queryCode);
         guPiao.setName(queryName);
         List list = guPiaoService.queryForList(guPiao);
-        log.info("GuPiaoController queryGP start");
+        log.debug("GuPiaoController queryGP start");
         return list;
     }
 

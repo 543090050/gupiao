@@ -38,45 +38,45 @@ public class GuPiaoServiceImpl extends BaseServiceImpl implements IGuPiaoService
     @Modifying
     @Override
     public GuPiao apply(GuPiao guPiao) {
-        log.info("GuPiaoServiceImpl apply start");
+        log.debug("GuPiaoServiceImpl apply start");
         GuPiao oldGuPiao = find(guPiao);
         if (null == oldGuPiao) {
             create(guPiao);
         } else {
             update(guPiao);
         }
-        log.info("GuPiaoServiceImpl apply end");
+        log.debug("GuPiaoServiceImpl apply end");
         return guPiao;
     }
 
     @Override
     @Transactional//涉及修改删除时需要增加事务
     public void create(GuPiao obj) {
-        log.info("GuPiaoServiceImpl create start");
+        log.debug("GuPiaoServiceImpl create start");
         guPiaoJPA.save(obj);
-        log.info("GuPiaoServiceImpl create end");
+        log.debug("GuPiaoServiceImpl create end");
     }
 
     @Override
     @Transactional//涉及修改删除时需要增加事务
     public void delete(GuPiao obj) {
-        log.info("GuPiaoServiceImpl delete start");
+        log.debug("GuPiaoServiceImpl delete start");
         xiangXiService.batchDeleteByGuPiao(obj);
 
         QGuPiao qGuPiao = QGuPiao.guPiao;
         getQueryFactory().delete(qGuPiao).where(qGuPiao.id.eq(obj.getId())).execute();
-        log.info("GuPiaoServiceImpl delete end");
+        log.debug("GuPiaoServiceImpl delete end");
     }
 
     @Override
     public GuPiao find(GuPiao obj) {
-        log.info("GuPiaoServiceImpl find start");
+        log.debug("GuPiaoServiceImpl find start");
         QGuPiao qGuPiao = QGuPiao.guPiao;
         obj = getQueryFactory()
                 .selectFrom(qGuPiao)//查询源
                 .where(qGuPiao.id.eq(obj.getId()))
                 .fetchOne();
-        log.info("GuPiaoServiceImpl find end");
+        log.debug("GuPiaoServiceImpl find end");
         return obj;
     }
 
@@ -84,19 +84,19 @@ public class GuPiaoServiceImpl extends BaseServiceImpl implements IGuPiaoService
     @Transactional//涉及修改删除时需要增加事务
     @Modifying
     public GuPiao update(GuPiao obj) {
-        log.info("GuPiaoServiceImpl update start");
+        log.debug("GuPiaoServiceImpl update start");
         QGuPiao qGuPiao = QGuPiao.guPiao;
         getQueryFactory().update(qGuPiao)
                 .set(qGuPiao.name, obj.getName())
                 .where(qGuPiao.id.eq(obj.getId()))
                 .execute();
-        log.info("GuPiaoServiceImpl update end");
+        log.debug("GuPiaoServiceImpl update end");
         return obj;
     }
 
     @Override
     public List<GuPiao> queryForList(GuPiao obj) {
-        log.info("GuPiaoServiceImpl queryForList start");
+        log.debug("GuPiaoServiceImpl queryForList start");
         String id = obj.getId();
         String name = obj.getName();
 
@@ -110,7 +110,7 @@ public class GuPiaoServiceImpl extends BaseServiceImpl implements IGuPiaoService
             query.where(qGuPiao.id.like(id));
         }
         List list = query.fetch();
-        log.info("GuPiaoServiceImpl queryForList end");
+        log.debug("GuPiaoServiceImpl queryForList end");
         return list;
     }
 

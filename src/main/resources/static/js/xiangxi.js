@@ -6,7 +6,14 @@ $(function () {
         locale: moment.locale('zh-cn')
     });
 });
-var baseUrl = 'http://127.0.0.1:8080/pageQueryXX';
+
+var urlPath = window.document.location.href;
+var docPath = window.document.location.pathname;
+var index = urlPath.indexOf(docPath);
+var serverPath = urlPath.substring(0, index);
+
+var baseUrl = serverPath+'/pageQueryXX';
+
 
 var fillTable= function(){
     //先销毁表格
@@ -61,7 +68,7 @@ function operateFormatter(value, row, index) {
 function fillTable1() {
     var oTable = $("#tb1");
     oTable.empty();
-    var queryUrl = "http://127.0.0.1:8080/queryXX";
+    var queryUrl = serverPath+"/queryXX";
     $.ajax({
         url: queryUrl,
         type: 'get',
@@ -102,7 +109,7 @@ function applyXiangXi(id) {
     } else {
         //修改
         $('#myModal').modal('show');
-        var url = "http://127.0.0.1:8080/findXX?id=" + id;
+        var url = serverPath+"/findXX?id=" + id;
         $.ajax({
             url: url,
             type: 'get',
@@ -138,7 +145,7 @@ function getFlag(i) {
 }
 
 function goBack() {
-    window.location.href = "http://127.0.0.1:8080/index";
+    window.location.href = serverPath+"/index";
 }
 
 
@@ -147,7 +154,7 @@ function deleteXiangXi(id) {
         if (!e) {
             return;
         }
-        var url = "http://127.0.0.1:8080/deleteXX?id=" + id;
+        var url = serverPath+"/deleteXX?id=" + id;
         $.ajax({
             url: url,
             type: 'get',
@@ -163,7 +170,7 @@ function deleteXiangXi(id) {
  * 查询标题的公司信息
  */
 function findGongSi() {
-    var url = "http://127.0.0.1:8080/findGP";
+    var url = serverPath+"/findGP";
     $.ajax({
         url: url,
         type: 'get',

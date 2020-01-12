@@ -6,10 +6,14 @@ $(document).ready(function () {
     fillTable();
 });
 
+var urlPath = window.document.location.href;
+var docPath = window.document.location.pathname;
+var index = urlPath.indexOf(docPath);
+var serverPath = urlPath.substring(0, index);
 
-var baseUrl = 'http://127.0.0.1:8080/pageQueryGP';
+var baseUrl = serverPath + '/pageQueryGP';
 
-var fillTable= function(){
+var fillTable = function () {
     //先销毁表格
     $('#table').bootstrapTable("destroy");
     $('#table').bootstrapTable({
@@ -43,10 +47,10 @@ var fillTable= function(){
             {field: 'name', title: '名称'},
             {field: 'count', title: '数量'},
             {
-                field:'action',
-                title:'操作',
+                field: 'action',
+                title: '操作',
                 // events:'operateEvents',
-                formatter:'operateFormatter',       //自定义表格内容，字符串内是方法名称
+                formatter: 'operateFormatter',       //自定义表格内容，字符串内是方法名称
             }
         ]
     });
@@ -82,7 +86,7 @@ function applyGongSi(id) {
         $("#name").val("");
     } else {
         //修改
-        var url = "http://127.0.0.1:8080/findGP?id=" + id;
+        var url = serverPath + "/findGP?id=" + id;
         $.ajax({
             url: url,
             type: 'get',
@@ -102,7 +106,7 @@ function deleteGongSi(id) {
         if (!e) {
             return;
         }
-        var url = "http://127.0.0.1:8080/deleteGP?id=" + id;
+        var url = serverPath + "/deleteGP?id=" + id;
         $.ajax({
             url: url,
             type: 'get',

@@ -27,37 +27,37 @@ public class XiangXiSerivceImpl extends BaseServiceImpl implements IXiangXiServi
     @Transactional
     @Override
     public void apply(XiangXi obj) {
-        log.info("XiangXiSerivceImpl apply start");
+        log.debug("XiangXiSerivceImpl apply start");
         XiangXi oldObj = find(obj);
         if (null == oldObj) {
             create(obj);
         } else {
             update(obj);
         }
-        log.info("XiangXiSerivceImpl apply end");
+        log.debug("XiangXiSerivceImpl apply end");
     }
 
     @Override
     public void create(XiangXi obj) {
-        log.info("XiangXiSerivceImpl create start");
+        log.debug("XiangXiSerivceImpl create start");
         xiangXiJPA.save(obj);
-        log.info("XiangXiSerivceImpl create end");
+        log.debug("XiangXiSerivceImpl create end");
     }
 
     @Override
     @Transactional
     public void delete(XiangXi obj) {
-        log.info("XiangXiSerivceImpl delete start");
+        log.debug("XiangXiSerivceImpl delete start");
         QXiangXi qXiangXi = QXiangXi.xiangXi;
 
         getQueryFactory().delete(qXiangXi).where(qXiangXi.id.eq(obj.getId())).execute();
-        log.info("XiangXiSerivceImpl delete end");
+        log.debug("XiangXiSerivceImpl delete end");
     }
 
     @Transactional
     @Override
     public void batchDeleteByGuPiao(GuPiao guPiao) {
-        log.info("XiangXiSerivceImpl batchDeleteByGuPiao start");
+        log.debug("XiangXiSerivceImpl batchDeleteByGuPiao start");
         XiangXi xiangXi = new XiangXi();
         xiangXi.setGongsi_id(guPiao.getId());
         List<XiangXi> xiangXiList = queryForList(xiangXi);
@@ -66,36 +66,36 @@ public class XiangXiSerivceImpl extends BaseServiceImpl implements IXiangXiServi
                 delete(xx);
             }
         }
-        log.info("XiangXiSerivceImpl batchDeleteByGuPiao end");
+        log.debug("XiangXiSerivceImpl batchDeleteByGuPiao end");
     }
 
     @Override
     public XiangXi find(XiangXi obj) {
-        log.info("XiangXiSerivceImpl find start");
+        log.debug("XiangXiSerivceImpl find start");
         String id = obj.getId();
         QXiangXi qXiangXi = QXiangXi.xiangXi;
         obj = getQueryFactory().selectFrom(qXiangXi).where(qXiangXi.id.eq(id)).fetchOne();
-        log.info("XiangXiSerivceImpl find end");
+        log.debug("XiangXiSerivceImpl find end");
         return obj;
     }
 
     @Transactional
     @Override
     public XiangXi update(XiangXi obj) {
-        log.info("XiangXiSerivceImpl update start");
+        log.debug("XiangXiSerivceImpl update start");
         QXiangXi qXiangXi = QXiangXi.xiangXi;
         getQueryFactory().update(qXiangXi)
                 .set(qXiangXi.time, obj.getTime())
                 .set(qXiangXi.tougu, obj.getTougu())
                 .where(qXiangXi.id.eq(obj.getId()))
                 .execute();
-        log.info("XiangXiSerivceImpl update end");
+        log.debug("XiangXiSerivceImpl update end");
         return obj;
     }
 
     @Override
     public List<XiangXi> queryForList(XiangXi obj) {
-        log.info("XiangXiSerivceImpl queryForList start");
+        log.debug("XiangXiSerivceImpl queryForList start");
         if (obj.getTime() == null) {
             obj.setTime("");
         }
@@ -104,7 +104,7 @@ public class XiangXiSerivceImpl extends BaseServiceImpl implements IXiangXiServi
                 .where(qXiangXi.gongsi_id.eq(obj.getGongsi_id())
                 .and(qXiangXi.time.like(obj.getTime()+"%")))
                 .fetch();
-        log.info("XiangXiSerivceImpl queryForList end");
+        log.debug("XiangXiSerivceImpl queryForList end");
         return list;
     }
 

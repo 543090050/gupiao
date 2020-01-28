@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -134,12 +131,12 @@ public class GuPiaoController {
             }
             resultList.add(queryGuPiao);
         }
+        Collections.sort(resultList);
         Map<String, Object> maps = new HashMap<>();
         maps.put("rows", resultList);
         maps.put("total", result.getTotal());
         return JSON.toJSONString(maps);
     }
-
 
     /**
      * 多表分页查询
